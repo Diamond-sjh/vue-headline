@@ -57,7 +57,10 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
-      <el-main>Main</el-main>
+      <el-main>
+        <!-- 二级路由渲染占位标签 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
