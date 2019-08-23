@@ -5,6 +5,8 @@ import Login from '@/views/login'
 import Home from '@/views/home'
 import Welcome from '@/views/welcome'
 
+import NotFound from '@/views/404'
+
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -16,6 +18,7 @@ export default new VueRouter({
       children: [
         { path: '/', name: 'welcome', component: Welcome }
       ]
-    }
+    },
+    { path: '*', name: '404', component: NotFound }
   ]
 })
