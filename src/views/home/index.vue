@@ -1,13 +1,15 @@
 <template>
   <el-container class="container">
-    <el-aside width="200px">
-      <div class="pic-box"></div>
+    <el-aside :width="isCollapse?'64px':'200px'">
+      <div class="pic-box" :class="{miniLogo:isCollapse}"></div>
       <el-menu
         default-active="1"
         class="el-menu-vertical-demo"
         background-color="#002033"
         text-color="#fff"
         active-text-color="#ffd04b"
+        :collapse="isCollapse"
+        :collapse-transition="false"
       >
         <el-menu-item index="1">
           <i class="el-icon-s-home"></i>
@@ -41,11 +43,11 @@
     </el-aside>
     <el-container>
       <el-header>
-        <span class="el-icon-s-fold icon"></span>
+        <span class="el-icon-s-fold icon" @click="isCollapse = !isCollapse"></span>
         <span class="title">江苏传智播客科技教育有限公司</span>
         <el-dropdown>
           <span class="el-dropdown-link my-dropdown">
-          <img src="../../assets/images/avatar.jpg" alt="">
+            <img src="../../assets/images/avatar.jpg" alt />
             用户名
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
@@ -61,7 +63,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      isCollapse: false
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -79,6 +87,10 @@ export default {}
       background: #002244 url(../../assets/images/logo_admin.png) no-repeat
         center / 140px auto;
     }
+    .miniLogo {
+      background-image: url(../../assets/images/logo_admin_01.png);
+      background-size: 36px auto;
+    }
     .el-menu {
       border-right: none;
     }
@@ -90,6 +102,7 @@ export default {}
       font-size: 24px;
       vertical-align: middle;
       margin-right: 10px;
+      cursor: pointer;
     }
     .title {
       vertical-align: middle;
