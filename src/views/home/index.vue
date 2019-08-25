@@ -46,15 +46,15 @@
       <el-header>
         <span class="el-icon-s-fold icon" @click="isCollapse = !isCollapse"></span>
         <span class="title">江苏传智播客科技教育有限公司</span>
-        <el-dropdown>
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link my-dropdown">
-            <img src="../../assets/images/avatar.jpg" alt />
-            用户名
+            <img :src="user.photo" alt />
+            {{user.name}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" command="/setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command="/login">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -67,10 +67,23 @@
 </template>
 
 <script>
+import Store from '@/store'
 export default {
+  created () {
+    const userInfo = Store.getUser()
+    this.user = userInfo
+  },
   data () {
     return {
-      isCollapse: false
+      isCollapse: false,
+      user: ''
+    }
+  },
+  methods: {
+    // 下拉菜单 菜单项的跳转
+    handleCommand (command) {
+      if (command === '/login') Store.delUser()
+      this.$router.push(command)
     }
   }
 }
