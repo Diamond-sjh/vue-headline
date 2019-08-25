@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Store from '@/store'
 export default {
   data () {
     // 定义验证手机号码格式的规则
@@ -60,6 +61,8 @@ export default {
         if (valid) {
           this.$http.post('/mp/v1_0/authorizations', this.loginForm)
             .then((result) => {
+              // 调用store/index.js封装的函数存储用户信息
+              Store.setUser(result.data.data)
               this.$router.push('/')
             })
             .catch(() => {
