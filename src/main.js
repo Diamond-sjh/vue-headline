@@ -10,7 +10,7 @@ import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUi)
-Axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/'
+Axios.defaults.baseURL = 'http://ttapi.research.itcast.cn//mp/v1_0/'
 Vue.prototype.$http = Axios
 
 Vue.config.productionTip = false

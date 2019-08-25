@@ -59,7 +59,7 @@ export default {
     login () {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.$http.post('/mp/v1_0/authorizations', this.loginForm)
+          this.$http.post('/authorizations', this.loginForm)
             .then((result) => {
               // 调用store/index.js封装的函数存储用户信息
               Store.setUser(result.data.data)
