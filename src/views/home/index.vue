@@ -3,7 +3,7 @@
     <el-aside :width="isCollapse?'64px':'200px'">
       <div class="pic-box" :class="{miniLogo:isCollapse}"></div>
       <el-menu
-        default-active="/"
+        :default-active="$route.path"
         class="el-menu-vertical-demo"
         background-color="#002033"
         text-color="#fff"

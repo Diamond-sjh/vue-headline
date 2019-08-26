@@ -9,7 +9,11 @@ import Axios from '@/api'
 import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+// 引入自定义插件
+import MyPlugin from '@/components'
+
 Vue.use(ElementUi)
+Vue.use(MyPlugin)
 Vue.prototype.$http = Axios
 
 Vue.config.productionTip = false
