@@ -17,9 +17,9 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select v-model="reqParams.channel_id" clearable placeholder="请选择">
-            <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
+          <!-- 频道选项 -->
+          <!-- 传参:value 父传子 -->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -99,8 +99,8 @@ export default {
         page: 1,
         per_page: 20
       },
-      // 频道参数
-      channels: [],
+      // 频道列表参数 =>封装
+      // channels: [],
       // 日期参数
       pubdate: [],
       // 文章内容列表
@@ -111,7 +111,7 @@ export default {
   },
   created () {
     // 页面加载发送axios请求获取文章频道
-    this.getChannels()
+    // this.getChannels()
     // 页面加载发送axios请求获取文章列表
     this.getTotal()
   },
@@ -142,10 +142,6 @@ export default {
     search () {
       // 每次查询的时候。当前页码在第一页
       this.reqParams.page = 1
-      // 当选择过频道，然后在清空的时候，channel_id为""，所以需要判断是否为空，为空则改为null
-      if (this.reqParams.channel_id === '') {
-        this.reqParams.channel_id = null
-      }
       this.getTotal()
     },
     // --------------------------------------------------获取文章内容列表
@@ -157,12 +153,7 @@ export default {
       this.total_count = data.total_count
     },
     // ------------------------------------------------获取文章频道
-    async getChannels () {
-      const {
-        data: { data }
-      } = await this.$http.get('/channels')
-      this.channels = data.channels
-    },
+    // 封装在公用组件中components/my-channel.vue
     // -----------------------------------------处理时间范围信息,内容发生变化调用
     changeDate (pubdate) {
       if (pubdate) {
