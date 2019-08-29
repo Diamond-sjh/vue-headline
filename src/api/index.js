@@ -2,6 +2,18 @@
 import Axios from 'axios'
 import Store from '@/store'
 import router from '@/routers'
+import JSONbig from 'json-bigint'
+
+// 配置相应数据转换格式
+Axios.defaults.transformResponse = [function (data) {
+  try {
+    // data原始json字符  对data进行转化  return的值转化后的结果
+    return JSONbig.parse(data)
+  } catch (error) {
+    // data 在删除接口返回的是 null 使用JSONBIG转换null会报错
+    return data
+  }
+}]
 
 // 配置基准地址
 Axios.defaults.baseURL = 'http://ttapi.research.itcast.cn//mp/v1_0/'

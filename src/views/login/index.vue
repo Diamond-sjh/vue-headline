@@ -57,17 +57,24 @@ export default {
   },
   methods: {
     login () {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
-          this.$http.post('/authorizations', this.loginForm)
-            .then((result) => {
-              // 调用store/index.js封装的函数存储用户信息
-              Store.setUser(result.data.data)
-              this.$router.push('/')
-            })
-            .catch(() => {
-              this.$message.error('手机号或者验证码错误')
-            })
+          try {
+            const { data: { data } } = await this.$http.post('/authorizations', this.loginForm)
+            Store.setUser(data)
+            this.$router.push('/')
+          } catch (error) {
+            this.$message.error('手机号或者验证码错误')
+          }
+          // this.$http.post('/authorizations', this.loginForm)
+          //   .then((result) => {
+          //     // 调用store/index.js封装的函数存储用户信息
+          //     Store.setUser(result.data.data)
+          //     this.$router.push('/')
+          //   })
+          //   .catch(() => {
+          //     this.$message.error('手机号或者验证码错误')
+          //   })
         }
       })
     }
