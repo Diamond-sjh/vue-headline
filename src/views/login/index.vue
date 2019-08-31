@@ -4,11 +4,12 @@
       <img src="../../assets/images/logo_index.png" alt />
       <el-form ref="loginForm" :rules="rules" status-icon :model="loginForm">
         <el-form-item prop="mobile">
-          <el-input placeholder="请输入手机号" v-model="loginForm.mobile"></el-input>
+          <el-input placeholder="请输入手机号" v-model="loginForm.mobile" @keyup.native.enter="login()"></el-input>
         </el-form-item>
         <el-form-item prop="code">
           <el-input
             placeholder="请输入验证码"
+            @keyup.enter.native="login()"
             v-model="loginForm.code"
             style="width:65%;margin-right:30px"
           ></el-input>
