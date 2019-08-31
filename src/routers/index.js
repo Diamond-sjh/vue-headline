@@ -6,6 +6,7 @@ import Home from '@/views/home'
 import Welcome from '@/views/welcome'
 import Article from '@/views/article'
 import Image from '@/views/image'
+import Publish from '@/views/publish'
 
 import NotFound from '@/views/404'
 import Store from '@/store'
@@ -21,7 +22,8 @@ const router = new VueRouter({
       children: [
         { path: '/', name: 'welcome', component: Welcome },
         { path: '/article', name: 'article', component: Article },
-        { path: '/image', name: 'image', component: Image }
+        { path: '/image', name: 'image', component: Image },
+        { path: '/publish', name: 'publish', component: Publish }
       ]
     },
     { path: '*', name: '404', component: NotFound }
@@ -36,5 +38,12 @@ router.beforeEach((to, from, next) => {
   if (to.path !== '/login' && !userInfo.token) next('/login')
   next()
 })
+
+// eslint-disable-next-line no-irregular-whitespace
+// 连续点击同一个路由报错 NavigationDuplicated {_name: "NavigationDuplicated", name: "NavigationDuplicated"}的解决方法
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 export default router
