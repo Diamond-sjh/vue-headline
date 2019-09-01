@@ -2,7 +2,7 @@
   <div>
     <el-card label-width="120px">
       <div slot="header">
-        <my-bread>发布文章</my-bread>
+        <my-bread>{{articleId?'修改':'发布'}}文章</my-bread>
       </div>
       <el-form label-width="100px">
         <el-form-item label="标题：">
@@ -13,7 +13,7 @@
           <quill-editor v-model="reqForm.content" ref="myQuillEditor" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面：">
-          <el-radio-group v-model="reqForm.cover.type">
+          <el-radio-group v-model="reqForm.cover.type" @change="changeType">
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
@@ -32,9 +32,13 @@
         <el-form-item label="频道：">
           <my-channel v-model="reqForm.channel_id"></my-channel>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="!articleId">
           <el-button type="primary" @click="submit(false)">发表</el-button>
           <el-button @click="submit(true)">存入草稿</el-button>
+        </el-form-item>
+        <el-form-item v-else>
+          <el-button type="success" @click="update(false)">修改</el-button>
+          <el-button @click="update(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -45,9 +49,10 @@
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-
+// 富文本模块引入
 import { quillEditor } from 'vue-quill-editor'
 export default {
+  // 注册富文本组件为私有组件
   components: {
     quillEditor
   },
@@ -60,7 +65,9 @@ export default {
           type: 1,
           images: []
         },
-        channel_id: null
+        channel_id: null,
+        // 地址栏文章ID
+        articleId: null
       },
       // 富文本编辑器配置
       editorOption: {
@@ -78,14 +85,37 @@ export default {
       }
     }
   },
+  created () {
+    // 获取地址栏文章ID，若有id则为编辑页面。反之为发表页面
+    this.articleId = this.$route.query.id
+    if (this.articleId) {
+      this.getArticle()
+    }
+  },
   methods: {
+    // 切换封面类型(单图，三图..)  需要重置图片数据为空，不然会导致图片重复出现
+    changeType () {
+      this.reqForm.cover.images = []
+    },
+    // ------------------------------------------发布或存为草稿
     async submit (draft) {
       await this.$http.post(`/articles?draft=${draft}`, this.reqForm)
-      if (draft) {
-        this.$message.success('存为草稿成功')
-      } else {
-        this.$message.success('文章发表成功')
-      }
+      // 提示
+      this.$message.success(draft ? '存入草稿成功' : '文章发表成功')
+      // 跳转内容管理
+      this.$router.push('/article')
+    },
+    // ------------------------------------------获取文章内容
+    async getArticle () {
+      const { data: { data } } = await this.$http.get(`/articles/${this.articleId}`)
+      this.reqForm = data
+    },
+    // ------------------------------------------修改或存为草稿
+    async update (draft) {
+      await this.$http.put(`/articles/${this.articleId}?draft=${draft}`, this.reqForm)
+      // 提示
+      this.$message.success(draft ? '存入草稿成功' : '文章修改成功')
+      // 跳转内容管理
       this.$router.push('/article')
     }
   }
