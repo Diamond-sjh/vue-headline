@@ -27,3 +27,6 @@
 .ql-editor {
   height: 300px;
 }
+body .el-dialog__body {
+  padding-bottom: 0;
+}

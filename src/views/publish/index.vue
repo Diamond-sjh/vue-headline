@@ -6,7 +6,7 @@
       </div>
       <el-form label-width="100px">
         <el-form-item label="标题：">
-          <el-input style="width:400px"></el-input>
+          <el-input style="width:400px" v-model="reqForm.title" placeholder="请输入5~30个字符"></el-input>
         </el-form-item>
         <el-form-item label="内容：">
           <!-- 富文本编辑器 -->
@@ -19,16 +19,22 @@
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-          <div class="btn_img">
-            <img src="../../assets/images/default.png" alt />
+          <!-- 自定义封装组件 -->
+          <div v-if="reqForm.cover.type===1">
+            <my-image v-model="reqForm.cover.images[0]"></my-image>
+          </div>
+          <div v-if="reqForm.cover.type===3">
+            <my-image v-model="reqForm.cover.images[0]"></my-image>
+            <my-image v-model="reqForm.cover.images[1]"></my-image>
+            <my-image v-model="reqForm.cover.images[2]"></my-image>
           </div>
         </el-form-item>
         <el-form-item label="频道：">
           <my-channel v-model="reqForm.channel_id"></my-channel>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">发表</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button type="primary" @click="submit(false)">发表</el-button>
+          <el-button @click="submit(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -63,27 +69,28 @@ export default {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'], // 加粗，斜体，下划线，删除线
             ['blockquote', 'code-block'], //  引用，代码块
-            [{ 'header': 1 }, { 'header': 2 }], // 标题，键值对的形式；1、2表示字体大小
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }], //  列表
-            [{ 'indent': '-1' }, { 'indent': '+1' }], // 缩进
+            [{ header: 1 }, { header: 2 }], // 标题，键值对的形式；1、2表示字体大小
+            [{ list: 'ordered' }, { list: 'bullet' }], //  列表
+            [{ indent: '-1' }, { indent: '+1' }], // 缩进
             ['image'] // 上传图片、上传视频
           ]
         }
       }
-
+    }
+  },
+  methods: {
+    async submit (draft) {
+      await this.$http.post(`/articles?draft=${draft}`, this.reqForm)
+      if (draft) {
+        this.$message.success('存为草稿成功')
+      } else {
+        this.$message.success('文章发表成功')
+      }
+      this.$router.push('/article')
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.btn_img {
-  width: 160px;
-  height: 160px;
-  border: 1px dashed #ddd;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
 </style>
