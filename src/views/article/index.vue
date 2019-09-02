@@ -46,7 +46,7 @@
           <template slot-scope="scope">
             <el-image
               :src="scope.row.cover.images[0]"
-              style="width: 120px; height: 100px"
+              style="width: 120px; height: 120px"
               fit="cover"
             >
               <div slot="error">
