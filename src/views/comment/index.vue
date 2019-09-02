@@ -29,6 +29,7 @@
         :current-page="reqParmas.page"
         :page-size="reqParmas.per_page"
         @current-change='changePage'
+        hide-on-single-page
       ></el-pagination>
     </el-card>
   </div>
